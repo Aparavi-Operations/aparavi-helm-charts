@@ -1,0 +1,33 @@
+{{- if .Values.aggregator.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aparavi.aggregator.fullname" . }}
+  labels:
+    {{- include "aparavi.aggregator.labels" . | nindent 4 }}
+data:
+  config.sh: |
+    #!/bin/bash
+
+    tar -xf "${ARTIFACT}"
+    rm "${ARTIFACT}"
+    ./node \
+      app/webserver.js \
+      --moduleType=appliance \
+      --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
+      --logcon \
+      --enableMetrics=true \
+      --enableErrorStacks \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote .Values.aggregator.config.nodeName }}) \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" .Values.aggregator.config.nodeName | quote }}) \
+      --config.node.nodeName="{{ quote .Values.aggregator.config.nodeName }}" \
+      --config.node.bindTo={{ quote .Values.aggregator.config.platform.host }} \
+      --config.node.parentObjectId={{ quote .Values.aggregator.config.platform.nodeId }} \
+      --config.database.dialect=mysql \
+      --config.database.host={{ include "mysql.hostname" . }} \
+      --config.database.port={{ include "mysql.port" . }} \
+      --config.database.user={{ .Values.aggregator.config.mysql.username }} \
+      --config.database.password="${MYSQL_PASSWORD}" \
+      --config.database.database={{ .Values.aggregator.config.mysql.database }} \
+      --no-config.enableHttps
+{{- end }}

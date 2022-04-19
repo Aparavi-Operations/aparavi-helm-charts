@@ -1,0 +1,74 @@
+{{- if .Values.aggregator.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aparavi.aggregator.fullname" . }}
+  labels:
+    {{- include "aparavi.aggregator.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.aggregator.autoscaling.enabled }}
+  replicas: {{ .Values.aggregator.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "aparavi.aggregator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/aggregator-configmap.yaml") . | sha256sum }}
+        {{- with .Values.aggregator.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "aparavi.aggregator.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aparavi.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.aggregator.podSecurityContext | nindent 8 }}
+      containers:
+        - name: aparavi
+          securityContext:
+            {{- toYaml .Values.aggregator.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "aparavi.aggregator.fullname" . }}
+                  key: mysql-password
+          ports:
+            - name: net
+              containerPort: 9545
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: net
+          resources:
+            {{- toYaml .Values.aggregator.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /root/entrypoint.sh
+              subPath: config.sh
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "aparavi.aggregator.fullname" . }}
+          defaultMode: 0100
+      {{- with .Values.aggregator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.aggregator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.aggregator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

@@ -1,0 +1,17 @@
+{{- if .Values.aggregator.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "aparavi.aggregator.fullname" . }}
+  labels:
+    {{- include "aparavi.aggregator.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.aggregator.service.type }}
+  ports:
+    - port: {{ .Values.aggregator.service.port }}
+      targetPort: net
+      protocol: TCP
+      name: net
+  selector:
+    {{- include "aparavi.aggregator.selectorLabels" . | nindent 4 }}
+{{- end }}

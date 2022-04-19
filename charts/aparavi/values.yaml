@@ -1,0 +1,106 @@
+image:
+  repository: aparavi.jfrog.io/app-docker-nonprod/app
+  pullPolicy: IfNotPresent
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+aggregator:
+  enabled: true
+  config:
+    platform:
+      host: ""  # HOSTNAME:PORT
+      nodeId: ""
+    nodeName: aggregator
+    mysql:
+      username: aggregator
+      password: aggregator
+      database: aggregator
+  service:
+    type: ClusterIP
+    port: 9545
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  replicaCount: 1
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+collector:
+  enabled: true
+  config:
+    aggregatorHost: ""  # HOSTNAME:PORT
+    nodeName: collector
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+  replicaCount: 1
+  podAnnotations: {}
+  podSecurityContext: {}
+    # fsGroup: 2000
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+mysql:
+  enabled: true
+  architecture: standalone
+  auth:
+    database: ""
+  initdbScripts:
+    initdb.sql: |
+      create user 'aggregator'@'%' identified by 'aggregator';
+      create database aggregator;
+      grant all privileges on aggregator.* to 'aggregator'@'%';
+  primary:
+    service:
+      port: 3306
+
+externalMysql:
+  hostname: mysql
+  port: 3306
