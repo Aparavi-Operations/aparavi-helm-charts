@@ -1,0 +1,29 @@
+{{- if .Values.aggregator.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "aparavi.fullname" . }}-aggregator
+  labels:
+    {{- include "aparavi.labels" . | nindent 4 }}
+    component: aggregator
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "aparavi.fullname" . }}-aggregator
+  minReplicas: {{ .Values.aggregator.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.aggregator.autoscaling.maxReplicas }}
+  metrics:
+    {{- if .Values.aggregator.autoscaling.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: {{ .Values.aggregator.autoscaling.targetCPUUtilizationPercentage }}
+    {{- end }}
+    {{- if .Values.aggregator.autoscaling.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: {{ .Values.aggregator.autoscaling.targetMemoryUtilizationPercentage }}
+    {{- end }}
+{{- end }}

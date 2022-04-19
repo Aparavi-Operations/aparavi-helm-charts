@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aparavi.fullname" . }}-aggregator
+  labels:
+    {{- include "aparavi.labels" . | nindent 4 }}
+    component: aggregator
+spec:
+  {{- if not .Values.aggregator.autoscaling.enabled }}
+  replicas: {{ .Values.aggregator.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "aparavi.selectorLabels" . | nindent 6 }}
+      component: aggregator
+  template:
+    metadata:
+      {{- with .Values.aggregator.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "aparavi.selectorLabels" . | nindent 8 }}
+        component: aggregator
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aparavi.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.aggregator.podSecurityContext | nindent 8 }}
+      containers:
+        - name: aparavi
+          securityContext:
+            {{- toYaml .Values.aggregator.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: net
+              containerPort: 9545
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          resources:
+            {{- toYaml .Values.aggregator.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /root/entrypoint.sh
+              subPath: config.sh
+      volumes:
+      - name: config
+        configMap:
+          name: {{ include "aparavi.fullname" . }}-aggregator
+          defaultMode: 0100
+      {{- with .Values.aggregator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.aggregator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.aggregator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

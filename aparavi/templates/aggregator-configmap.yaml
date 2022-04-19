@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aparavi.fullname" . }}-aggregator
+  labels:
+    {{- include "aparavi.labels" . | nindent 4 }}
+    component: aggregator
+data:
+  config.sh: |
+    #!/bin/bash
+
+    tar -xf "${ARTIFACT}"
+    rm "${ARTIFACT}"
+    export NODE_UUID=$(uuidgen -s -n @x500 -N aggregator)
+    export HOST_UUID=$(uuidgen -s -n @x500 -N aggregator-host)
+    ./node app/webserver.js \
+      --moduleType=appliance \
+      --config.node.nodeName=aggregator \
+      --config.node.bindTo={{ include "aparavi.fullname" . }}-platform \
+      --config.database.dialect=mysql \
+      --config.database.host={{ .Values.mysql.host }} \
+      --config.database.port={{ .Values.mysql.port }} \
+      --config.database.user={{ .Values.mysql.user }} \
+      --config.database.password={{ .Values.mysql.password }} \
+      --config.node.nodeId=${NODE_UUID} \
+      --config.node.hostId=${HOST_UUID} \
+      --enableMetrics=true \
+      --no-config.enableHttps \
+      --logcon \
+      --config.node.parentObjectId=CLIENTS \
+      --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
+      --enableErrorStacks
