@@ -1,0 +1,32 @@
+{{- if .Values.collector.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aparavi.collector.fullname" . }}
+  labels:
+    {{- include "aparavi.collector.labels" . | nindent 4 }}
+data:
+  config.sh: |
+    #!/bin/bash
+
+    tar -xf "${ARTIFACT}"
+    rm "${ARTIFACT}"
+    ./node \
+      app/webserver.js \
+      --moduleType=agent \
+      --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
+      --logcon \
+      --enableErrorStacks \
+      --enableMetrics=true \
+      --database.extendedObjectInfo=true \
+      --queue.startServiceDelay=5 \
+      --core.startServiceDelay=5 \
+      --config.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) | quote }} \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote .Values.collector.config.nodeName }}) \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" .Values.collector.config.nodeName | quote }}) \
+      --config.node.nodeName="{{ quote .Values.collector.config.nodeName }}" \
+      --config.node.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) | quote }} \
+      --config.node.parentObjectId={{ quote .Values.aggregator.config.nodeName }} \
+      --config.database.dialect=sqlite \
+      --no-config.enableHttps
+{{- end }}

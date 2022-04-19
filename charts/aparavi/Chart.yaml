@@ -1,0 +1,11 @@
+apiVersion: v2
+appVersion: "2.0.3-6437"
+dependencies:
+  - name: mysql
+    condition: mysql.enabled
+    repository: https://charts.bitnami.com/bitnami
+    version: ~8.9.2
+description: Aparavi Helm chart for Kubernetes
+name: aparavi
+type: application
+version: 0.1.0
