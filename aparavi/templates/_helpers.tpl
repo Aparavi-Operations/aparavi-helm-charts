@@ -70,6 +70,7 @@ Common labels
 */}}
 {{- define "aparavi.labels" -}}
 helm.sh/chart: {{ include "aparavi.chart" . }}
+{{ include "aparavi.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -77,19 +78,25 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{- define "aparavi.platform.labels" -}}
-{{ include "aparavi.labels" . }}
-{{ include "aparavi.platform.selectorLabels" . }}
-{{- end }}
+{{- $aparaviLabels := fromYaml (include "aparavi.labels" .) -}}
+{{- $selectorLabels := fromYaml (include "aparavi.platform.selectorLabels" .) -}}
+{{- $labels := merge $selectorLabels $aparaviLabels -}}
+{{ toYaml $labels }}
+{{- end -}}
 
 {{- define "aparavi.aggregator.labels" -}}
-{{ include "aparavi.labels" . }}
-{{ include "aparavi.aggregator.selectorLabels" . }}
-{{- end }}
+{{- $aparaviLabels := fromYaml (include "aparavi.labels" .) -}}
+{{- $selectorLabels := fromYaml (include "aparavi.aggregator.selectorLabels" .) -}}
+{{- $labels := merge $selectorLabels $aparaviLabels -}}
+{{ toYaml $labels }}
+{{- end -}}
 
 {{- define "aparavi.collector.labels" -}}
-{{ include "aparavi.labels" . }}
-{{ include "aparavi.collector.selectorLabels" . }}
-{{- end }}
+{{- $aparaviLabels := fromYaml (include "aparavi.labels" .) -}}
+{{- $selectorLabels := fromYaml (include "aparavi.collector.selectorLabels" .) -}}
+{{- $labels := merge $selectorLabels $aparaviLabels -}}
+{{ toYaml $labels }}
+{{- end -}}
 
 {{/*
 Create the name of the service account to use
