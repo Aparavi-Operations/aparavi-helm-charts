@@ -13,10 +13,11 @@ spec:
       {{- include "aparavi.platform.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.platform.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        checksum/config: {{ include (print $.Template.BasePath "/platform-configmap.yaml") . | sha256sum }}
+        {{- with .Values.platform.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "aparavi.platform.selectorLabels" . | nindent 8 }}
     spec:
