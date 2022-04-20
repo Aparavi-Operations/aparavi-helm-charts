@@ -1,18 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "aparavi.fullname" . }}-collector
+  name: {{ include "aparavi.collector.fullname" . }}
   labels:
-    {{- include "aparavi.labels" . | nindent 4 }}
-    component: collector
+    {{- include "aparavi.collector.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.collector.autoscaling.enabled }}
   replicas: {{ .Values.collector.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "aparavi.selectorLabels" . | nindent 6 }}
-      component: collector
+      {{- include "aparavi.collector.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.collector.podAnnotations }}
@@ -20,8 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "aparavi.selectorLabels" . | nindent 8 }}
-        component: collector
+        {{- include "aparavi.collector.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -53,7 +50,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ include "aparavi.fullname" . }}-collector
+          name: {{ include "aparavi.collector.fullname" . }}
           defaultMode: 0100
       {{- with .Values.collector.nodeSelector }}
       nodeSelector:

@@ -1,18 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "aparavi.fullname" . }}-platform
+  name: {{ include "aparavi.platform.fullname" . }}
   labels:
-    {{- include "aparavi.labels" . | nindent 4 }}
-    component: platform
+    {{- include "aparavi.platform.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.platform.autoscaling.enabled }}
   replicas: {{ .Values.platform.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "aparavi.selectorLabels" . | nindent 6 }}
-      component: platform
+      {{- include "aparavi.platform.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.platform.podAnnotations }}
@@ -20,8 +18,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "aparavi.selectorLabels" . | nindent 8 }}
-        component: platform
+        {{- include "aparavi.platform.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -60,7 +57,7 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ include "aparavi.fullname" . }}-platform
+          name: {{ include "aparavi.platform.fullname" . }}
           defaultMode: 0100
       {{- with .Values.platform.nodeSelector }}
       nodeSelector:

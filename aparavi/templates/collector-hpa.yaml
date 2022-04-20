@@ -2,15 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "aparavi.fullname" . }}-collector
+  name: {{ include "aparavi.collector.fullname" . }}
   labels:
-    {{- include "aparavi.labels" . | nindent 4 }}
-    component: collector
+    {{- include "aparavi.collector.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "aparavi.fullname" . }}-collector
+    name: {{ include "aparavi.collector.fullname" . }}
   minReplicas: {{ .Values.collector.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.collector.autoscaling.maxReplicas }}
   metrics:

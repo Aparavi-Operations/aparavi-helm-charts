@@ -23,6 +23,18 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 {{- end }}
 
+{{- define "aparavi.platform.fullname" -}}
+{{- include "aparavi.fullname" . -}}-platform
+{{- end }}
+
+{{- define "aparavi.aggregator.fullname" -}}
+{{- include "aparavi.fullname" . -}}-aggregator
+{{- end }}
+
+{{- define "aparavi.collector.fullname" -}}
+{{- include "aparavi.fullname" . -}}-collector
+{{- end }}
+
 {{/*
 Create chart name and version as used by the chart label.
 */}}
@@ -31,23 +43,52 @@ Create chart name and version as used by the chart label.
 {{- end }}
 
 {{/*
+Selector labels
+*/}}
+{{- define "aparavi.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "aparavi.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "aparavi.platform.selectorLabels" -}}
+{{ include "aparavi.selectorLabels" . }}
+app.kubernetes.io/component: platform
+{{- end }}
+
+{{- define "aparavi.aggregator.selectorLabels" -}}
+{{ include "aparavi.selectorLabels" . }}
+app.kubernetes.io/component: aggregator
+{{- end }}
+
+{{- define "aparavi.collector.selectorLabels" -}}
+{{ include "aparavi.selectorLabels" . }}
+app.kubernetes.io/component: collector
+{{- end }}
+
+{{/*
 Common labels
 */}}
 {{- define "aparavi.labels" -}}
 helm.sh/chart: {{ include "aparavi.chart" . }}
-{{ include "aparavi.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
-{{/*
-Selector labels
-*/}}
-{{- define "aparavi.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "aparavi.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+{{- define "aparavi.platform.labels" -}}
+{{ include "aparavi.labels" . }}
+{{ include "aparavi.platform.selectorLabels" . }}
+{{- end }}
+
+{{- define "aparavi.aggregator.labels" -}}
+{{ include "aparavi.labels" . }}
+{{ include "aparavi.aggregator.selectorLabels" . }}
+{{- end }}
+
+{{- define "aparavi.collector.labels" -}}
+{{ include "aparavi.labels" . }}
+{{ include "aparavi.collector.selectorLabels" . }}
 {{- end }}
 
 {{/*

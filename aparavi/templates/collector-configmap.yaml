@@ -1,10 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "aparavi.fullname" . }}-collector
+  name: {{ include "aparavi.collector.fullname" . }}
   labels:
-    {{- include "aparavi.labels" . | nindent 4 }}
-    component: collector
+    {{- include "aparavi.collector.labels" . | nindent 4 }}
 data:
   config.sh: |
     #!/bin/bash
@@ -16,8 +15,8 @@ data:
     ./node app/webserver.js \
     --moduleType=agent \
     --config.node.nodeName=collector \
-    --config.bindTo={{ include "aparavi.fullname" . }}-aggregator \
-    --config.node.bindTo={{ include "aparavi.fullname" . }}-aggregator \
+    --config.bindTo={{ include "aparavi.aggregator.fullname" . }} \
+    --config.node.bindTo={{ include "aparavi.aggregator.fullname" . }} \
     --config.node.nodeId=${NODE_UUID} \
     --config.node.hostId=${HOST_UUID} \
     --enableMetrics=true \

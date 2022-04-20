@@ -2,15 +2,14 @@
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "aparavi.fullname" . }}-platform
+  name: {{ include "aparavi.platform.fullname" . }}
   labels:
-    {{- include "aparavi.labels" . | nindent 4 }}
-    component: platform
+    {{- include "aparavi.platform.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "aparavi.fullname" . }}-platform
+    name: {{ include "aparavi.platform.fullname" . }}
   minReplicas: {{ .Values.platform.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.platform.autoscaling.maxReplicas }}
   metrics:
