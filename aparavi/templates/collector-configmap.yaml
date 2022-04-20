@@ -14,9 +14,9 @@ data:
     rm "${ARTIFACT}"
     ./node \
       app/webserver.js \
-      --config.bindTo={{ include "aparavi.aggregator.fullname" . }} \
+      --config.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) }} \
       --config.database.dialect=sqlite \
-      --config.node.bindTo={{ include "aparavi.aggregator.fullname" . }} \
+      --config.node.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) }} \
       --config.node.hostId=${HOST_UUID} \
       --config.node.nodeId=${NODE_UUID} \
       --config.node.nodeName=collector \

@@ -19,7 +19,7 @@ data:
       --config.database.password={{ .Values.mysql.password }} \
       --config.database.port={{ .Values.mysql.port }} \
       --config.database.user={{ .Values.mysql.user }} \
-      --config.node.bindTo={{ include "aparavi.platform.fullname" . }} \
+      --config.node.bindTo={{ .Values.aggregator.config.platformHost | default (include "aparavi.platform.fullname" .) }} \
       --config.node.hostId=${HOST_UUID} \
       --config.node.nodeId=${NODE_UUID} \
       --config.node.nodeName=aggregator \

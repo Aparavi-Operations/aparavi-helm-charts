@@ -71,6 +71,8 @@ platform:
   tolerations: []
 
 aggregator:
+  config:
+    platformHost: ""  # HOSTNAME:PORT
   service:
     type: ClusterIP
     port: 9545
@@ -107,6 +109,8 @@ aggregator:
   tolerations: []
 
 collector:
+  config:
+    aggregatorHost: ""  # HOSTNAME:PORT
   autoscaling:
     enabled: false
     minReplicas: 1
