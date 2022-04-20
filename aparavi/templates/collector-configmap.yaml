@@ -12,20 +12,21 @@ data:
     export NODE_UUID=$(uuidgen -s -n @x500 -N collector)
     export HOST_UUID=$(uuidgen -s -n @x500 -N collector-host)
     rm "${ARTIFACT}"
-    ./node app/webserver.js \
-    --moduleType=agent \
-    --config.node.nodeName=collector \
-    --config.bindTo={{ include "aparavi.aggregator.fullname" . }} \
-    --config.node.bindTo={{ include "aparavi.aggregator.fullname" . }} \
-    --config.node.nodeId=${NODE_UUID} \
-    --config.node.hostId=${HOST_UUID} \
-    --enableMetrics=true \
-    --no-config.enableHttps \
-    --database.extendedObjectInfo=true \
-    --config.database.dialect=sqlite \
-    --core.startServiceDelay=5 \
-    --queue.startServiceDelay=5 \
-    --logcon \
-    --config.node.parentObjectId=aggregator \
-    --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
-    --enableErrorStacks
+    ./node \
+      app/webserver.js \
+      --config.bindTo={{ include "aparavi.aggregator.fullname" . }} \
+      --config.database.dialect=sqlite \
+      --config.node.bindTo={{ include "aparavi.aggregator.fullname" . }} \
+      --config.node.hostId=${HOST_UUID} \
+      --config.node.nodeId=${NODE_UUID} \
+      --config.node.nodeName=collector \
+      --config.node.parentObjectId=aggregator \
+      --core.startServiceDelay=5 \
+      --database.extendedObjectInfo=true \
+      --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
+      --enableErrorStacks \
+      --enableMetrics=true \
+      --logcon \
+      --moduleType=agent \
+      --no-config.enableHttps \
+      --queue.startServiceDelay=5

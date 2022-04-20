@@ -12,20 +12,21 @@ data:
     rm "${ARTIFACT}"
     export NODE_UUID=$(uuidgen -s -n @x500 -N aggregator)
     export HOST_UUID=$(uuidgen -s -n @x500 -N aggregator-host)
-    ./node app/webserver.js \
-      --moduleType=appliance \
-      --config.node.nodeName=aggregator \
-      --config.node.bindTo={{ include "aparavi.platform.fullname" . }} \
+    ./node \
+      app/webserver.js \
       --config.database.dialect=mysql \
       --config.database.host={{ .Values.mysql.host }} \
+      --config.database.password={{ .Values.mysql.password }} \
       --config.database.port={{ .Values.mysql.port }} \
       --config.database.user={{ .Values.mysql.user }} \
-      --config.database.password={{ .Values.mysql.password }} \
-      --config.node.nodeId=${NODE_UUID} \
+      --config.node.bindTo={{ include "aparavi.platform.fullname" . }} \
       --config.node.hostId=${HOST_UUID} \
-      --enableMetrics=true \
-      --no-config.enableHttps \
-      --logcon \
+      --config.node.nodeId=${NODE_UUID} \
+      --config.node.nodeName=aggregator \
       --config.node.parentObjectId=CLIENTS \
       --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
-      --enableErrorStacks
+      --enableErrorStacks \
+      --enableMetrics=true \
+      --logcon \
+      --moduleType=appliance \
+      --no-config.enableHttps

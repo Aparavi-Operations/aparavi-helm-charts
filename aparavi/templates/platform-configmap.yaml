@@ -10,15 +10,16 @@ data:
 
     tar -xf "${ARTIFACT}"
     rm "${ARTIFACT}"
-    ./node app/webserver.js \
-      --moduleType=platform \
-      --config.node.nodeName=platform \
-      --config.keyStore.dialect=redis \
-      --config.keyStore.host={{ .Values.redis.host }} \
-      --config.keyStore.port={{ .Values.redis.port }} \
-      --config.keyStore.password={{ .Values.redis.password }} \
+    ./node \
+      app/webserver.js \
       --config.database.dialect=mysql \
       --config.database.host={{ .Values.mysql.host }} \
+      --config.database.password={{ .Values.mysql.password }} \
       --config.database.port={{ .Values.mysql.port }} \
       --config.database.user={{ .Values.mysql.user }} \
-      --config.database.password={{ .Values.mysql.password }}
+      --config.keyStore.dialect=redis \
+      --config.keyStore.host={{ .Values.redis.host }} \
+      --config.keyStore.password={{ .Values.redis.password }} \
+      --config.keyStore.port={{ .Values.redis.port }} \
+      --config.node.nodeName=platform \
+      --moduleType=platform
