@@ -13,6 +13,9 @@ data:
     rm "${ARTIFACT}"
     ./node \
       app/webserver.js \
+      {{- if .Values.ingress.enabled }}
+      --config.baseURL=http{{ if .Values.ingress.tls }}s{{ end }}://{{ get (first .Values.ingress.hosts) "host" }} \
+      {{- end }}
       --config.database.dialect=mysql \
       --config.database.host={{ .Values.mysql.host }} \
       --config.database.password={{ .Values.mysql.password }} \
