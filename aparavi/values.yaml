@@ -33,6 +33,17 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+redis:
+  host: redis-master
+  port: 6379
+  password: ""
+
+mysql:
+  host: mysql
+  port: 3306
+  user: root
+  password: ""
+
 platform:
   enabled: true
   service:
@@ -145,14 +156,3 @@ collector:
   nodeSelector: {}
   affinity: {}
   tolerations: []
-
-redis:
-  host: redis-master
-  port: 6379
-  password: r72XCXPbJm
-
-mysql:
-  host: mysql
-  port: 3306
-  user: root
-  password: J45FP5DjPv
