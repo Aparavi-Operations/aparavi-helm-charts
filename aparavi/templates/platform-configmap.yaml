@@ -1,3 +1,4 @@
+{{- if .Values.platform.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -23,3 +24,4 @@ data:
       --config.keyStore.port={{ .Values.redis.port }} \
       --config.node.nodeName=platform \
       --moduleType=platform
+{{- end }}

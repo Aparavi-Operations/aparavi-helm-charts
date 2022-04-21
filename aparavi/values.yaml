@@ -34,6 +34,7 @@ ingress:
   #      - chart-example.local
 
 platform:
+  enabled: true
   service:
     type: ClusterIP
     httpPort: 80
@@ -71,6 +72,7 @@ platform:
   tolerations: []
 
 aggregator:
+  enabled: true
   config:
     platformHost: ""  # HOSTNAME:PORT
   service:
@@ -109,6 +111,7 @@ aggregator:
   tolerations: []
 
 collector:
+  enabled: true
   config:
     aggregatorHost: ""  # HOSTNAME:PORT
   autoscaling:
