@@ -1,5 +1,10 @@
 apiVersion: v2
 appVersion: "1.16.0"
+dependencies:
+  - name: redis
+    condition: redis.enabled
+    repository: https://charts.bitnami.com/bitnami
+    version: ~16.8.7
 description: Aparavi Helm chart for Kubernetes
 name: aparavi
 type: application

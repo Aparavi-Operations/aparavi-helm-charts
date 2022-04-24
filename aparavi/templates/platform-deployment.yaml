@@ -16,6 +16,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/platform-configmap.yaml") . | sha256sum }}
+        checksum/redisSecret: {{ include (print $.Template.BasePath "/redis-secret.yaml") . | sha256sum }}
         {{- with .Values.platform.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -35,6 +36,9 @@ spec:
             {{- toYaml .Values.platform.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: {{ include "redis.passwordEnvName" . }}
+              {{- include "redis.passwordEnvValue" . | nindent 14 }}
           ports:
             - name: http
               containerPort: 9452

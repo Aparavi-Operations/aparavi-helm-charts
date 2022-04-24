@@ -108,3 +108,46 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Return the Redis hostname
+*/}}
+{{- define "redis.hostname" -}}
+{{- if .Values.redis.enabled -}}
+  {{ .Release.Name }}-redis-master
+{{- else -}}
+  {{ .Values.externalRedis.hostname }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Redis port
+*/}}
+{{- define "redis.port" -}}
+{{- if .Values.redis.enabled }}
+  {{- default "6379" .Values.redis.master.service.ports.redis }}
+{{- else -}}
+  {{ .Values.externalRedis.port }}
+{{- end -}}
+{{- end -}}
+
+{{- define "redis.passwordEnvName" -}}
+REDIS_PASSWORD
+{{- end -}}
+
+{{- define "redis.secretName" -}}
+{{ .Release.Name }}-redis
+{{- end -}}
+
+{{- define "redis.passwordSecretKey" -}}
+redis-password
+{{- end -}}
+
+{{- define "redis.passwordEnvValue" -}}
+{{- if or (not .Values.redis.enabled) (and .Values.redis.enabled .Values.redis.auth.enabled) -}}
+valueFrom:
+  secretKeyRef:
+    name: {{ include "redis.secretName" . }}
+    key: {{ include "redis.passwordSecretKey" . }}
+{{- end -}}
+{{- end -}}

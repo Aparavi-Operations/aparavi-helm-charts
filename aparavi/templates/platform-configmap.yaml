@@ -22,9 +22,9 @@ data:
       --config.database.port={{ .Values.mysql.port }} \
       --config.database.user={{ .Values.mysql.user }} \
       --config.keyStore.dialect=redis \
-      --config.keyStore.host={{ .Values.redis.host }} \
-      --config.keyStore.password={{ .Values.redis.password }} \
-      --config.keyStore.port={{ .Values.redis.port }} \
+      --config.keyStore.host={{ include "redis.hostname" . }} \
+      --config.keyStore.password="${{ include "redis.passwordEnvName" . }}" \
+      --config.keyStore.port={{ include "redis.port" . }} \
       --config.node.nodeName=platform \
       --moduleType=platform
 {{- end }}

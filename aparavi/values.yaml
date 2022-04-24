@@ -33,17 +33,6 @@ ingress:
   #    hosts:
   #      - aparavi.local
 
-redis:
-  host: redis-master
-  port: 6379
-  password: ""
-
-mysql:
-  host: mysql
-  port: 3306
-  user: root
-  password: ""
-
 platform:
   enabled: true
   service:
@@ -156,3 +145,20 @@ collector:
   nodeSelector: {}
   affinity: {}
   tolerations: []
+
+redis:
+  enabled: true
+  architecture: standalone
+  auth:
+    enabled: true
+
+externalRedis:
+  hostname: redis-master
+  port: 6379
+  password: ""
+
+mysql:
+  host: mysql
+  port: 3306
+  user: root
+  password: ""
