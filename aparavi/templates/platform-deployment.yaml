@@ -56,14 +56,13 @@ spec:
             - name: net
               containerPort: 9455
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            tcpSocket:
+              port: net
+          readinessProbe:
+            httpGet:
+              path: /login
+              port: http
           resources:
             {{- toYaml .Values.platform.resources | nindent 12 }}
           volumeMounts:

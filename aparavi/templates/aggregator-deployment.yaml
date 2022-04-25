@@ -45,14 +45,9 @@ spec:
             - name: net
               containerPort: 9545
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            tcpSocket:
+              port: net
           resources:
             {{- toYaml .Values.aggregator.resources | nindent 12 }}
           volumeMounts:
