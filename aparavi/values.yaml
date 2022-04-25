@@ -36,6 +36,7 @@ ingress:
 platform:
   enabled: true
   config:
+    rootPassword: root
     mysql:
       username: platform
       password: platform

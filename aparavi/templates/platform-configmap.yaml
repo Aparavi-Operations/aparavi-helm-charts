@@ -13,8 +13,15 @@ data:
     rm "${ARTIFACT}"
     ./node \
       app/webserver.js \
+      --moduleType=platform \
+      --root-password="${ROOT_PASSWORD}" \
+      --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
+      --logcon \
+      --enableErrorStacks \
+      --config.enableMetrics=true \
       --config.node.nodeId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.platform.fullname" . }}") \
       --config.node.hostId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.platform.fullname" . }}-host") \
+      --config.node.nodeName=platform \
       {{- if .Values.ingress.enabled }}
       --config.baseURL=http{{ if .Values.ingress.tls }}s{{ end }}://{{ get (first .Values.ingress.hosts) "host" }} \
       {{- end }}
@@ -28,6 +35,5 @@ data:
       --config.keyStore.host={{ include "redis.hostname" . }} \
       --config.keyStore.password="${{ include "redis.passwordEnvName" . }}" \
       --config.keyStore.port={{ include "redis.port" . }} \
-      --config.node.nodeName=platform \
-      --moduleType=platform
+      --no-config.enableHttps
 {{- end }}

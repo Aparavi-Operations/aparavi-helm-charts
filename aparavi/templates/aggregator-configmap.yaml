@@ -13,21 +13,21 @@ data:
     rm "${ARTIFACT}"
     ./node \
       app/webserver.js \
+      --moduleType=appliance \
+      --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
+      --logcon \
+      --enableMetrics=true \
+      --enableErrorStacks \
       --config.node.nodeId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.aggregator.fullname" . }}") \
       --config.node.hostId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.aggregator.fullname" . }}-host") \
+      --config.node.nodeName=aggregator \
+      --config.node.bindTo={{ .Values.aggregator.config.platformHost | default (include "aparavi.platform.fullname" .) }} \
+      --config.node.parentObjectId=CLIENTS \
       --config.database.dialect=mysql \
       --config.database.host={{ include "mysql.hostname" . }} \
       --config.database.port={{ include "mysql.port" . }} \
       --config.database.user={{ .Values.aggregator.config.mysql.username }} \
       --config.database.password="${MYSQL_PASSWORD}" \
       --config.database.database={{ .Values.aggregator.config.mysql.database }} \
-      --config.node.bindTo={{ .Values.aggregator.config.platformHost | default (include "aparavi.platform.fullname" .) }} \
-      --config.node.nodeName=aggregator \
-      --config.node.parentObjectId=CLIENTS \
-      --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \
-      --enableErrorStacks \
-      --enableMetrics=true \
-      --logcon \
-      --moduleType=appliance \
       --no-config.enableHttps
 {{- end }}
