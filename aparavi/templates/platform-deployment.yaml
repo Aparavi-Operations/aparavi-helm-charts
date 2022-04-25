@@ -39,6 +39,11 @@ spec:
           env:
             - name: {{ include "redis.passwordEnvName" . }}
               {{- include "redis.passwordEnvValue" . | nindent 14 }}
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "aparavi.platform.fullname" . }}
+                  key: mysql-password
           ports:
             - name: http
               containerPort: 9452

@@ -11,18 +11,17 @@ data:
 
     tar -xf "${ARTIFACT}"
     rm "${ARTIFACT}"
-    export NODE_UUID=$(uuidgen -s -n @x500 -N aggregator)
-    export HOST_UUID=$(uuidgen -s -n @x500 -N aggregator-host)
     ./node \
       app/webserver.js \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.aggregator.fullname" . }}") \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.aggregator.fullname" . }}-host") \
       --config.database.dialect=mysql \
-      --config.database.host={{ .Values.mysql.host }} \
-      --config.database.password={{ .Values.mysql.password }} \
-      --config.database.port={{ .Values.mysql.port }} \
-      --config.database.user={{ .Values.mysql.user }} \
+      --config.database.host={{ include "mysql.hostname" . }} \
+      --config.database.port={{ include "mysql.port" . }} \
+      --config.database.user={{ .Values.aggregator.config.mysql.username }} \
+      --config.database.password="${MYSQL_PASSWORD}" \
+      --config.database.database={{ .Values.aggregator.config.mysql.database }} \
       --config.node.bindTo={{ .Values.aggregator.config.platformHost | default (include "aparavi.platform.fullname" .) }} \
-      --config.node.hostId=${HOST_UUID} \
-      --config.node.nodeId=${NODE_UUID} \
       --config.node.nodeName=aggregator \
       --config.node.parentObjectId=CLIENTS \
       --debug=ACTN,AUTH,BTCH,CMLD,CMND,CONF,CONS,CORE,CRIT,DATB,DIAG,DNLD,DPRV,ENGI,ERR,ESTK,EVNL,EVNT,FILE,GENR,HTTP,INIT,INST,IPIP,KEYS,KPRV,LIST,LOAD,LOGS,MONI,MSMP,NODC,NODS,NOTF,NPDU,PACK,PARS,PERM,PIPE,PLUG,POLC,POOL,QUEL,QUEP,RLIN,ROOM,ROUT,SBAT,SECR,SESS,SRCH,STOR,TASK,TRAN,TSQL,UPDT,URI \

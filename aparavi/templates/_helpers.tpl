@@ -151,3 +151,29 @@ valueFrom:
     key: {{ include "redis.passwordSecretKey" . }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the MySQL Hostname
+*/}}
+{{- define "mysql.hostname" -}}
+{{- if .Values.mysql.enabled }}
+    {{- if eq .Values.mysql.architecture "replication" }}
+        {{ .Release.Name }}-mysql-primary
+    {{- else -}}
+        {{ .Release.Name }}-mysql
+    {{- end -}}
+{{- else -}}
+    {{- .Values.externalMysql.hostname -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the MySQL Port
+*/}}
+{{- define "mysql.port" -}}
+{{- if .Values.mysql.enabled }}
+    {{- default "3306" .Values.mysql.primary.service.port -}}
+{{- else -}}
+    {{- .Values.externalMysql.port -}}
+{{- end -}}
+{{- end -}}

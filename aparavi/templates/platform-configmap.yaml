@@ -13,14 +13,17 @@ data:
     rm "${ARTIFACT}"
     ./node \
       app/webserver.js \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.platform.fullname" . }}") \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.platform.fullname" . }}-host") \
       {{- if .Values.ingress.enabled }}
       --config.baseURL=http{{ if .Values.ingress.tls }}s{{ end }}://{{ get (first .Values.ingress.hosts) "host" }} \
       {{- end }}
       --config.database.dialect=mysql \
-      --config.database.host={{ .Values.mysql.host }} \
-      --config.database.password={{ .Values.mysql.password }} \
-      --config.database.port={{ .Values.mysql.port }} \
-      --config.database.user={{ .Values.mysql.user }} \
+      --config.database.host={{ include "mysql.hostname" . }} \
+      --config.database.port={{ include "mysql.port" . }} \
+      --config.database.user={{ .Values.platform.config.mysql.username }} \
+      --config.database.password="${MYSQL_PASSWORD}" \
+      --config.database.database={{ .Values.platform.config.mysql.database }} \
       --config.keyStore.dialect=redis \
       --config.keyStore.host={{ include "redis.hostname" . }} \
       --config.keyStore.password="${{ include "redis.passwordEnvName" . }}" \

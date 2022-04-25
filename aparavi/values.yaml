@@ -35,6 +35,11 @@ ingress:
 
 platform:
   enabled: true
+  config:
+    mysql:
+      username: platform
+      password: platform
+      database: platform
   service:
     type: ClusterIP
     httpPort: 80
@@ -75,6 +80,10 @@ aggregator:
   enabled: true
   config:
     platformHost: ""  # HOSTNAME:PORT
+    mysql:
+      username: aggregator
+      password: aggregator
+      database: aggregator
   service:
     type: ClusterIP
     port: 9545
@@ -158,7 +167,22 @@ externalRedis:
   password: ""
 
 mysql:
-  host: mysql
+  enabled: true
+  architecture: standalone
+  auth:
+    database: ""
+  initdbScripts:
+    initdb.sql: |
+      create user 'platform'@'%' identified by 'platform';
+      create user 'aggregator'@'%' identified by 'aggregator';
+      create database platform;
+      create database aggregator;
+      grant all privileges on platform.* to 'platform'@'%';
+      grant all privileges on aggregator.* to 'aggregator'@'%';
+  primary:
+    service:
+      port: 3306
+
+externalMysql:
+  hostname: mysql
   port: 3306
-  user: root
-  password: ""
