@@ -12,66 +12,13 @@ serviceAccount:
   annotations: {}
   name: ""
 
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: aparavi.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: aparavi-tls
-  #    hosts:
-  #      - aparavi.local
-
-platform:
-  enabled: true
-  config:
-    rootPassword: root
-    mysql:
-      username: platform
-      password: platform
-      database: platform
-  service:
-    type: ClusterIP
-    httpPort: 80
-    netPort: 9455
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-  replicaCount: 1
-  podAnnotations: {}
-  podSecurityContext: {}
-    # fsGroup: 2000
-  securityContext: {}
-    # capabilities:
-    #   drop:
-    #   - ALL
-    # readOnlyRootFilesystem: true
-    # runAsNonRoot: true
-    # runAsUser: 1000
-  resources: {}
-    # limits:
-    #   cpu: 100m
-    #   memory: 128Mi
-    # requests:
-    #   cpu: 100m
-    #   memory: 128Mi
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
-
 aggregator:
   enabled: true
   config:
-    platformHost: ""  # HOSTNAME:PORT
+    platform:
+      host: ""  # HOSTNAME:PORT
+      nodeId: ""
+    nodeName: aggregator
     mysql:
       username: aggregator
       password: aggregator
@@ -111,6 +58,7 @@ collector:
   enabled: true
   config:
     aggregatorHost: ""  # HOSTNAME:PORT
+    nodeName: collector
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -139,17 +87,6 @@ collector:
   affinity: {}
   tolerations: []
 
-redis:
-  enabled: true
-  architecture: standalone
-  auth:
-    enabled: true
-
-externalRedis:
-  hostname: redis-master
-  port: 6379
-  password: ""
-
 mysql:
   enabled: true
   architecture: standalone
@@ -157,11 +94,8 @@ mysql:
     database: ""
   initdbScripts:
     initdb.sql: |
-      create user 'platform'@'%' identified by 'platform';
       create user 'aggregator'@'%' identified by 'aggregator';
-      create database platform;
       create database aggregator;
-      grant all privileges on platform.* to 'platform'@'%';
       grant all privileges on aggregator.* to 'aggregator'@'%';
   primary:
     service:

@@ -8,10 +8,6 @@ metadata:
     "helm.sh/hook": test
 spec:
   containers:
-    - name: wget-platform
-      image: busybox
-      command: ['wget']
-      args: ['{{ include "aparavi.platform.fullname" . }}:{{ .Values.platform.service.port }}']
     - name: wget-aggregator
       image: busybox
       command: ['wget']

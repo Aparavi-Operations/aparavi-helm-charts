@@ -18,11 +18,11 @@ data:
       --logcon \
       --enableMetrics=true \
       --enableErrorStacks \
-      --config.node.nodeId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.aggregator.fullname" . }}") \
-      --config.node.hostId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.aggregator.fullname" . }}-host") \
-      --config.node.nodeName=aggregator \
-      --config.node.bindTo={{ .Values.aggregator.config.platformHost | default (include "aparavi.platform.fullname" .) }} \
-      --config.node.parentObjectId=CLIENTS \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote .Values.aggregator.config.nodeName }}) \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" .Values.aggregator.config.nodeName | quote }}) \
+      --config.node.nodeName="{{ quote .Values.aggregator.config.nodeName }}" \
+      --config.node.bindTo={{ quote .Values.aggregator.config.platform.host }} \
+      --config.node.parentObjectId={{ quote .Values.aggregator.config.platform.nodeId }} \
       --config.database.dialect=mysql \
       --config.database.host={{ include "mysql.hostname" . }} \
       --config.database.port={{ include "mysql.port" . }} \

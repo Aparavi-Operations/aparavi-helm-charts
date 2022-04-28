@@ -21,12 +21,12 @@ data:
       --database.extendedObjectInfo=true \
       --queue.startServiceDelay=5 \
       --core.startServiceDelay=5 \
-      --config.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) }} \
-      --config.node.nodeId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.collector.fullname" . }}") \
-      --config.node.hostId=$(uuidgen -s -n @x500 -N "{{ include "aparavi.collector.fullname" . }}-host") \
-      --config.node.nodeName=collector \
-      --config.node.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) }} \
-      --config.node.parentObjectId=aggregator \
+      --config.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) | quote }} \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote .Values.collector.config.nodeName }}) \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" .Values.collector.config.nodeName | quote }}) \
+      --config.node.nodeName="{{ quote .Values.collector.config.nodeName }}" \
+      --config.node.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) | quote }} \
+      --config.node.parentObjectId={{ quote .Values.aggregator.config.nodeName }} \
       --config.database.dialect=sqlite \
       --no-config.enableHttps
 {{- end }}
