@@ -1,5 +1,5 @@
 image:
-  repository: aparavi.jfrog.io/app-docker-nonprod/app
+  repository: aparavi.jfrog.io/public-app/app
   pullPolicy: IfNotPresent
   tag: ""
 
