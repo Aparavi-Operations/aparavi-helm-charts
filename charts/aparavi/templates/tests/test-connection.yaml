@@ -24,4 +24,20 @@ spec:
         - {{ include "aparavi.aggregator.fullname" . }}:{{ .Values.aggregator.service.httpPort }}
         - -w
         - 1
+    - name: nc-collector-net
+      image: busybox
+      command:
+        - nc
+      args:
+        - {{ include "aparavi.collector.fullname" . }}:{{ .Values.collector.service.netPort }}
+        - -w
+        - 1
+    - name: nc-collector-http
+      image: busybox
+      command:
+        - nc
+      args:
+        - {{ include "aparavi.collector.fullname" . }}:{{ .Values.collector.service.httpPort }}
+        - -w
+        - 1
   restartPolicy: Never

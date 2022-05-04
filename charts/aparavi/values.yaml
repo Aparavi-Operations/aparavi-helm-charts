@@ -60,6 +60,10 @@ collector:
   config:
     aggregatorHost: ""  # HOSTNAME:PORT
     nodeName: collector
+  service:
+    type: ClusterIP
+    netPort: 9645
+    httpPort: 9652
   autoscaling:
     enabled: false
     minReplicas: 1

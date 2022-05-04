@@ -35,6 +35,16 @@ spec:
             {{- toYaml .Values.collector.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: net
+              containerPort: 9645
+              protocol: TCP
+            - name: http
+              containerPort: 9652
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: net
           resources:
             {{- toYaml .Values.collector.resources | nindent 12 }}
           volumeMounts:
