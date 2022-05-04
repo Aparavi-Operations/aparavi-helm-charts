@@ -45,6 +45,9 @@ spec:
             - name: net
               containerPort: 9545
               protocol: TCP
+            - name: http
+              containerPort: 9552
+              protocol: TCP
           livenessProbe:
             tcpSocket:
               port: net

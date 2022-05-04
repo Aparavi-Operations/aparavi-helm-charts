@@ -8,8 +8,20 @@ metadata:
     "helm.sh/hook": test
 spec:
   containers:
-    - name: wget-aggregator
+    - name: nc-aggregator-net
       image: busybox
-      command: ['wget']
-      args: ['{{ include "aparavi.aggregator.fullname" . }}:{{ .Values.aggregator.service.port }}']
+      command:
+        - nc
+      args:
+        - {{ include "aparavi.aggregator.fullname" . }}:{{ .Values.aggregator.service.netPort }}
+        - -w
+        - 1
+    - name: nc-aggregator-http
+      image: busybox
+      command:
+        - nc
+      args:
+        - {{ include "aparavi.aggregator.fullname" . }}:{{ .Values.aggregator.service.httpPort }}
+        - -w
+        - 1
   restartPolicy: Never

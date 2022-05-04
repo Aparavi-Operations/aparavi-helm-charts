@@ -8,10 +8,14 @@ metadata:
 spec:
   type: {{ .Values.aggregator.service.type }}
   ports:
-    - port: {{ .Values.aggregator.service.port }}
+    - port: {{ .Values.aggregator.service.netPort }}
       targetPort: net
       protocol: TCP
       name: net
+    - port: {{ .Values.aggregator.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
     {{- include "aparavi.aggregator.selectorLabels" . | nindent 4 }}
 {{- end }}
