@@ -9,6 +9,8 @@ spec:
   {{- if not .Values.aggregator.autoscaling.enabled }}
   replicas: {{ .Values.aggregator.replicaCount }}
   {{- end }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       {{- include "aparavi.aggregator.selectorLabels" . | nindent 6 }}
