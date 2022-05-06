@@ -60,6 +60,15 @@ collector:
   config:
     aggregatorHost: ""  # HOSTNAME:PORT
     nodeName: collector
+  extraVolumes:
+    []
+    # - name: extras
+    #   emptyDir: {}
+  extraVolumeMounts:
+    []
+    # - name: extras
+    #   mountPath: /usr/share/extras
+    #   readOnly: true
   service:
     type: ClusterIP
     netPort: 9645

@@ -60,10 +60,10 @@ spec:
               mountPath: /root/entrypoint.sh
               subPath: entrypoint.sh
       volumes:
-      - name: entrypoint
-        configMap:
-          name: {{ include "aparavi.aggregator.fullname" . }}
-          defaultMode: 0100
+        - name: entrypoint
+          configMap:
+            name: {{ include "aparavi.aggregator.fullname" . }}
+            defaultMode: 0100
       {{- with .Values.aggregator.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
