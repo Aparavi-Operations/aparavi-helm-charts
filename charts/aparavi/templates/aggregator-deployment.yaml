@@ -56,11 +56,11 @@ spec:
           resources:
             {{- toYaml .Values.aggregator.resources | nindent 12 }}
           volumeMounts:
-            - name: config
+            - name: entrypoint
               mountPath: /root/entrypoint.sh
-              subPath: config.sh
+              subPath: entrypoint.sh
       volumes:
-      - name: config
+      - name: entrypoint
         configMap:
           name: {{ include "aparavi.aggregator.fullname" . }}
           defaultMode: 0100
