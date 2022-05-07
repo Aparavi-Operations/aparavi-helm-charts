@@ -34,6 +34,11 @@ aggregator:
     # - name: extras
     #   mountPath: /usr/share/extras
     #   readOnly: true
+  initContainers:
+    []
+    # - name: do-something
+    #   image: busybox
+    #   command: ['do', 'something']
   service:
     type: ClusterIP
     netPort: 9545
@@ -87,6 +92,11 @@ collector:
     # - name: extras
     #   mountPath: /usr/share/extras
     #   readOnly: true
+  initContainers:
+    []
+    # - name: do-something
+    #   image: busybox
+    #   command: ['do', 'something']
   service:
     type: ClusterIP
     netPort: 9645

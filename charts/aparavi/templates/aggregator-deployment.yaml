@@ -31,6 +31,10 @@ spec:
       serviceAccountName: {{ include "aparavi.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.aggregator.podSecurityContext | nindent 8 }}
+      {{- if .Values.aggregator.initContainers }}
+      initContainers:
+      {{- toYaml .Values.aggregator.initContainers | nindent 8 }}
+      {{- end }}
       containers:
         - name: aparavi
           securityContext:
