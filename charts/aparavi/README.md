@@ -49,8 +49,12 @@ Parameter | Description | Default
 `aggregator.config.mysql.username` | MySQL username | `"aggregator"`
 `aggregator.config.mysql.password` | MySQL password | `"aggregator"`
 `aggregator.config.mysql.database` | MySQL database | `"aggregator"`
+`aggregator.extraVolumes` | Extra volumes | `[]`
+`aggregator.extraVolumeMounts` | Extra volume mounts | `[]`
+`aggregator.initContainers` | Init containers | `[]`
 `aggregator.service.type` | Type of the Service | `"CluserIP"`
-`aggregator.service.port` | The port of the Service named `"net"` | `9545`
+`aggregator.service.netPort` | `"net"` port | `9545`
+`aggregator.service.httpPort` | `"http"` port | `9552`
 `aggregator.autoscaling.enable` | Enable Horizontal Pod Autoscaler (HPA) | `false`
 `aggregator.autoscaling.minReplicas` | `minReplicas` of the HPA | `1`
 `aggregator.autoscaling.maxReplicas` | `maxReplicas` of the HPA | `100`
@@ -72,6 +76,12 @@ Parameter | Description | Default
 `collector.enabled` | Enable aggregator | `true`
 `collector.config.aggregatorHost` | External Aparavi Aggregator host in `"HOSTNAME:PORT"` format | `""`
 `collector.config.nodeName` | Node name of this instance | `"collector"`
+`collector.extraVolumes` | Extra volumes | `[]`
+`collector.extraVolumeMounts` | Extra volume mounts | `[]`
+`collector.initContainers` | Init containers | `[]`
+`collector.service.type` | Type of the Service | `"CluserIP"`
+`collector.service.netPort` | `"net"` port | `9645`
+`collector.service.httpPort` | `"http"` port | `9652`
 `collector.autoscaling.enable` | Enable Horizontal Pod Autoscaler (HPA) | `false`
 `collector.autoscaling.minReplicas` | `minReplicas` of the HPA | `1`
 `collector.autoscaling.maxReplicas` | `maxReplicas` of the HPA | `100`
