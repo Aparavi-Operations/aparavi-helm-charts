@@ -3,13 +3,15 @@ image:
   pullPolicy: IfNotPresent
   tag: ""
 
-imagePullSecrets: []
+imagePullSecrets:
+  []
 nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
   create: true
-  annotations: {}
+  annotations:
+    {}
   name: ""
 
 aggregator:
@@ -34,26 +36,33 @@ aggregator:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
   replicaCount: 1
-  podAnnotations: {}
-  podSecurityContext: {}
+  podAnnotations:
+    {}
+  podSecurityContext:
+    {}
     # fsGroup: 2000
-  securityContext: {}
+  securityContext:
+    {}
     # capabilities:
     #   drop:
     #   - ALL
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-  resources: {}
+  resources:
+    {}
     # limits:
     #   cpu: 100m
     #   memory: 128Mi
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
+  nodeSelector:
+    {}
+  affinity:
+    {}
+  tolerations:
+    []
 
 collector:
   enabled: true
@@ -80,26 +89,33 @@ collector:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
   replicaCount: 1
-  podAnnotations: {}
-  podSecurityContext: {}
+  podAnnotations:
+    {}
+  podSecurityContext:
+    {}
     # fsGroup: 2000
-  securityContext: {}
+  securityContext:
+    {}
     # capabilities:
     #   drop:
     #   - ALL
     # readOnlyRootFilesystem: true
     # runAsNonRoot: true
     # runAsUser: 1000
-  resources: {}
+  resources:
+    {}
     # limits:
     #   cpu: 100m
     #   memory: 128Mi
     # requests:
     #   cpu: 100m
     #   memory: 128Mi
-  nodeSelector: {}
-  affinity: {}
-  tolerations: []
+  nodeSelector:
+    {}
+  affinity:
+    {}
+  tolerations:
+    []
 
 mysql:
   enabled: true
