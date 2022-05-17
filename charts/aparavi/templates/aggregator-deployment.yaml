@@ -6,9 +6,7 @@ metadata:
   labels:
     {{- include "aparavi.aggregator.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.aggregator.autoscaling.enabled }}
-  replicas: {{ .Values.aggregator.replicaCount }}
-  {{- end }}
+  replicas: 1
   strategy:
     type: Recreate
   selector:

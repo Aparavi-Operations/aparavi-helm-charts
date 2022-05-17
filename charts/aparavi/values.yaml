@@ -43,13 +43,6 @@ aggregator:
     type: ClusterIP
     netPort: 9545
     httpPort: 9552
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-  replicaCount: 1
   podAnnotations:
     {}
   podSecurityContext:
@@ -101,13 +94,6 @@ collector:
     type: ClusterIP
     netPort: 9645
     httpPort: 9652
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    # targetMemoryUtilizationPercentage: 80
-  replicaCount: 1
   podAnnotations:
     {}
   podSecurityContext:

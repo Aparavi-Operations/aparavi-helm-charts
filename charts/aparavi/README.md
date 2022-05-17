@@ -55,12 +55,6 @@ Parameter | Description | Default
 `aggregator.service.type` | Type of the Service | `"CluserIP"`
 `aggregator.service.netPort` | `"net"` port | `9545`
 `aggregator.service.httpPort` | `"http"` port | `9552`
-`aggregator.autoscaling.enable` | Enable Horizontal Pod Autoscaler (HPA) | `false`
-`aggregator.autoscaling.minReplicas` | `minReplicas` of the HPA | `1`
-`aggregator.autoscaling.maxReplicas` | `maxReplicas` of the HPA | `100`
-`aggregator.autoscaling.targetCPUUtilizationPercentage` | `targetCPUUtilizationPercentage` of the HPA | `80`
-`aggregator.autoscaling.targetMemoryUtilizationPercentage` | `targetMemoryUtilizationPercentage` of the HPA | None:
-`aggregator.replicaCount` | Deployment `replicas` | `1`
 `aggregator.podAnnotations` | Deployment pod annotations | `{}`
 `aggregator.podSecurityContext` | Deployment pod `securityContext` | `{}`
 `aggregator.securityContext` | `aparavi` container `securityContext` | `{}`
@@ -82,12 +76,6 @@ Parameter | Description | Default
 `collector.service.type` | Type of the Service | `"CluserIP"`
 `collector.service.netPort` | `"net"` port | `9645`
 `collector.service.httpPort` | `"http"` port | `9652`
-`collector.autoscaling.enable` | Enable Horizontal Pod Autoscaler (HPA) | `false`
-`collector.autoscaling.minReplicas` | `minReplicas` of the HPA | `1`
-`collector.autoscaling.maxReplicas` | `maxReplicas` of the HPA | `100`
-`collector.autoscaling.targetCPUUtilizationPercentage` | `targetCPUUtilizationPercentage` of the HPA | `80`
-`collector.autoscaling.targetMemoryUtilizationPercentage` | `targetMemoryUtilizationPercentage` of the HPA | None:
-`collector.replicaCount` | Deployment `replicas` | `1`
 `collector.podAnnotations` | Deployment pod annotations | `{}`
 `collector.podSecurityContext` | Deployment pod `securityContext` | `{}`
 `collector.securityContext` | `aparavi` container `securityContext` | `{}`
