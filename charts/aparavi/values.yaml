@@ -67,7 +67,17 @@ aggregator:
   nodeSelector:
     {}
   affinity:
-    {}
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - collector
+            topologyKey: kubernetes.io/hostname
   tolerations:
     []
 
@@ -118,7 +128,17 @@ collector:
   nodeSelector:
     {}
   affinity:
-    {}
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - aggregator
+            topologyKey: kubernetes.io/hostname
   tolerations:
     []
 

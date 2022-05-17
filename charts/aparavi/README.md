@@ -60,7 +60,7 @@ Parameter | Description | Default
 `aggregator.securityContext` | `aparavi` container `securityContext` | `{}`
 `aggregator.resources` | Pod resource requests and limits | `{}`
 `aggregator.nodeSelector` | Node labels for pod assignment | `{}`
-`aggregator.affinity` | Node/Pod affinities | `{}`
+`aggregator.affinity` | Node/Pod affinities | <pre>podAntiAffinity:<br>&emsp;&emsp;preferredDuringSchedulingIgnoredDuringExecution:<br>&emsp;&emsp;&emsp;&emsp;- weight: 100<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;podAffinityTerm<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;labelSelector:<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;matchExpressions:<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;- key: app.kubernetes.io/component<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;operator: In<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;values:<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;- collector<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;topologyKey: kubernetes.io/hostname</pre>
 `aggregator.tolerations` | List of Node taints to tolerate | `[]`
 
 ### Collector parameters
@@ -81,7 +81,7 @@ Parameter | Description | Default
 `collector.securityContext` | `aparavi` container `securityContext` | `{}`
 `collector.resources` | Pod resource requests and limits | `{}`
 `collector.nodeSelector` | Node labels for pod assignment | `{}`
-`collector.affinity` | Node/Pod affinities | `{}`
+`collector.affinity` | Node/Pod affinities | <pre>podAntiAffinity:<br>&emsp;&emsp;preferredDuringSchedulingIgnoredDuringExecution:<br>&emsp;&emsp;&emsp;&emsp;- weight: 100<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;podAffinityTerm<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;labelSelector:<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;matchExpressions:<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;- key: app.kubernetes.io/component<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;operator: In<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;values:<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;- aggregator<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;topologyKey: kubernetes.io/hostname</pre>
 `collector.tolerations` | List of Node taints to tolerate | `[]`
 
 ### MySQL parameters
