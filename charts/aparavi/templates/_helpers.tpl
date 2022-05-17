@@ -38,6 +38,14 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
+{{- define "aparavi.aggregator.uniqueLabels" -}}
+app.kubernetes.io/component: aggregator
+{{- end }}
+
+{{- define "aparavi.collector.uniqueLabels" -}}
+app.kubernetes.io/component: collector
+{{- end }}
+
 {{/*
 Selector labels
 */}}
@@ -48,12 +56,12 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "aparavi.aggregator.selectorLabels" -}}
 {{ include "aparavi.selectorLabels" . }}
-app.kubernetes.io/component: aggregator
+{{ include "aparavi.aggregator.uniqueLabels" . }}
 {{- end }}
 
 {{- define "aparavi.collector.selectorLabels" -}}
 {{ include "aparavi.selectorLabels" . }}
-app.kubernetes.io/component: collector
+{{ include "aparavi.collector.uniqueLabels" . }}
 {{- end }}
 
 {{/*
