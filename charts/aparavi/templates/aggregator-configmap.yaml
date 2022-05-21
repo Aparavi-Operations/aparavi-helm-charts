@@ -1,4 +1,6 @@
 {{- if .Values.aggregator.enabled }}
+{{- $default := printf "%s-aggregator" .Release.Name -}}
+{{- $nodeName := default $default .Values.aggregator.config.nodeName -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18,9 +20,9 @@ data:
       --logcon \
       --enableMetrics=true \
       --enableErrorStacks \
-      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote .Values.aggregator.config.nodeName }}) \
-      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" .Values.aggregator.config.nodeName | quote }}) \
-      --config.node.nodeName="{{ quote .Values.aggregator.config.nodeName }}" \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote $nodeName }}) \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" $nodeName | quote }}) \
+      --config.node.nodeName={{ quote $nodeName }} \
       --config.node.bindTo={{ quote .Values.aggregator.config.platform.host }} \
       --config.node.parentObjectId={{ quote .Values.aggregator.config.platform.nodeId }} \
       --config.database.dialect=mysql \

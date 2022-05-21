@@ -20,7 +20,8 @@ aggregator:
     platform:
       host: ""  # HOSTNAME:PORT
       nodeId: ""
-    nodeName: aggregator
+    # If left empty, will default to .Release.Name-aggregator
+    nodeName: ""
     mysql:
       username: aggregator
       password: aggregator
@@ -86,7 +87,8 @@ collector:
   enabled: true
   config:
     aggregatorHost: ""  # HOSTNAME:PORT
-    nodeName: collector
+    # If left empty, will default to .Release.Name-collector
+    nodeName: ""
   extraVolumes:
     []
     # - name: extras

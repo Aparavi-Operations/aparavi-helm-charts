@@ -45,7 +45,7 @@ Parameter | Description | Default
 `aggregator.enabled` | Enable aggregator | `true`
 `aggregator.config.platform.host` | External Aparavi Platform host in `"HOSTNAME:PORT"` format | `""`
 `aggregator.config.platform.nodeId` | External Aparavi Platform nodeId to bind to | `""`
-`aggregator.config.nodeName` | Node name of this instance | `"aggregator"`
+`aggregator.config.nodeName` | Node name of this instance. If empty, will default to .Release.Name-aggregator | `""`
 `aggregator.config.mysql.username` | MySQL username | `"aggregator"`
 `aggregator.config.mysql.password` | MySQL password | `"aggregator"`
 `aggregator.config.mysql.database` | MySQL database | `"aggregator"`
@@ -69,7 +69,7 @@ Parameter | Description | Default
 -|-|-
 `collector.enabled` | Enable aggregator | `true`
 `collector.config.aggregatorHost` | External Aparavi Aggregator host in `"HOSTNAME:PORT"` format | `""`
-`collector.config.nodeName` | Node name of this instance | `"collector"`
+`collector.config.nodeName` | Node name of this instance. If empty, will default to .Release.Name-collector | `""`
 `collector.extraVolumes` | Extra volumes | `[]`
 `collector.extraVolumeMounts` | Extra volume mounts | `[]`
 `collector.initContainers` | Init containers | `[]`

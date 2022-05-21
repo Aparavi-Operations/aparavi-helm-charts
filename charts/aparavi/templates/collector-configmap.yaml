@@ -1,4 +1,6 @@
 {{- if .Values.collector.enabled }}
+{{- $default := printf "%s-collector" .Release.Name -}}
+{{- $nodeName := default $default .Values.collector.config.nodeName -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -22,9 +24,9 @@ data:
       --queue.startServiceDelay=5 \
       --core.startServiceDelay=5 \
       --config.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) | quote }} \
-      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote .Values.collector.config.nodeName }}) \
-      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" .Values.collector.config.nodeName | quote }}) \
-      --config.node.nodeName="{{ quote .Values.collector.config.nodeName }}" \
+      --config.node.nodeId=$(uuidgen -s -n @x500 -N {{ quote $nodeName }}) \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" $nodeName | quote }}) \
+      --config.node.nodeName={{ quote $nodeName }} \
       --config.node.bindTo={{ .Values.collector.config.aggregatorHost | default (include "aparavi.aggregator.fullname" .) | quote }} \
       --config.node.parentObjectId={{ quote .Values.aggregator.config.nodeName }} \
       --config.database.dialect=sqlite \
