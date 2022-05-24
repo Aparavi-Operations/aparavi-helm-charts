@@ -3,6 +3,21 @@ entries:
   aparavi:
   - apiVersion: v2
     appVersion: 2.0.3-6437
+    created: "2022-05-24T06:08:48.324752375Z"
+    dependencies:
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      version: ~8.9.2
+    description: Aparavi Helm chart for Kubernetes
+    digest: 101b19c4ca9fb679316b0bae3da3c4eceda48e3ca204d491ced3db674fbb2ad3
+    name: aparavi
+    type: application
+    urls:
+    - https://github.com/Aparavi-Operations/helm-charts/releases/download/aparavi-0.13.0/aparavi-0.13.0.tgz
+    version: 0.13.0
+  - apiVersion: v2
+    appVersion: 2.0.3-6437
     created: "2022-05-21T14:24:15.58698352Z"
     dependencies:
     - condition: mysql.enabled
@@ -181,4 +196,4 @@ entries:
     urls:
     - https://github.com/Aparavi-Operations/helm-charts/releases/download/aparavi-0.1.0/aparavi-0.1.0.tgz
     version: 0.1.0
-generated: "2022-05-21T14:24:15.587308129Z"
+generated: "2022-05-24T06:08:48.324847675Z"
