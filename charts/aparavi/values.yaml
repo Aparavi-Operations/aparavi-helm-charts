@@ -25,7 +25,6 @@ aggregator:
     mysql:
       username: aggregator
       password: aggregator
-      database: aggregator
   extraVolumes:
     []
     # - name: extras
@@ -154,8 +153,7 @@ mysql:
   initdbScripts:
     initdb.sql: |
       create user 'aggregator'@'%' identified by 'aggregator';
-      create database aggregator;
-      grant all privileges on aggregator.* to 'aggregator'@'%';
+      grant all privileges on *.* to 'aggregator'@'%';
   primary:
     service:
       port: 3306

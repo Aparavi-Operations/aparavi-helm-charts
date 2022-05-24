@@ -48,7 +48,6 @@ Parameter | Description | Default
 `aggregator.config.nodeName` | Node name of this instance. If empty, will default to .Release.Name-aggregator | `""`
 `aggregator.config.mysql.username` | MySQL username | `"aggregator"`
 `aggregator.config.mysql.password` | MySQL password | `"aggregator"`
-`aggregator.config.mysql.database` | MySQL database | `"aggregator"`
 `aggregator.extraVolumes` | Extra volumes | `[]`
 `aggregator.extraVolumeMounts` | Extra volume mounts | `[]`
 `aggregator.initContainers` | Init containers | `[]`
@@ -92,7 +91,7 @@ Parameter | Description | Default
 `mysql.enabled` | Deploy a MySQL server to satisfy applications's database requirements | `true`
 `mysql.architecture` | MySQL architecture. Allowed values are `standalone` and `replication` | `"standalone"`
 `mysql.auth.database` | Name for a custom database to create | `""`
-`mysql.initdbScripts` | Dictionary of initdb scripts | <pre>initdb.sql: \|<br>&emsp; create user 'aggregator'@'%' identified by 'aggregator';<br>&emsp; create database aggregator;<br>&emsp; grant all privileges on aggregator.* to 'aggregator'@'%';</pre>
+`mysql.initdbScripts` | Dictionary of initdb scripts | <pre>initdb.sql: \|<br>&emsp; create user 'aggregator'@'%' identified by 'aggregator';<br>&emsp; grant all privileges on *.* to 'aggregator'@'%';</pre>
 `mysql.primary.service.port` | MySQL Primary service port | `3306`
 `externalMysql.hostname` | External MySQL server hostname | `"redis-master"`
 `externalMysql.port` | External MySQL server port | `3306`

@@ -30,6 +30,5 @@ data:
       --config.database.port={{ include "mysql.port" . }} \
       --config.database.user={{ .Values.aggregator.config.mysql.username }} \
       --config.database.password="${MYSQL_PASSWORD}" \
-      --config.database.database={{ .Values.aggregator.config.mysql.database }} \
       --no-config.enableHttps
 {{- end }}
