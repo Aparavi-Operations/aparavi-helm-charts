@@ -8,4 +8,4 @@ dependencies:
 description: Aparavi Helm chart for Kubernetes
 name: aparavi
 type: application
-version: 0.14.0
+version: 0.13.0
