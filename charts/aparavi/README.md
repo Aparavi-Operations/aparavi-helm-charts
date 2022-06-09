@@ -69,6 +69,9 @@ Parameter | Description | Default
 `collector.enabled` | Enable aggregator | `true`
 `collector.config.aggregatorHost` | External Aparavi Aggregator host in `"HOSTNAME:PORT"` format | `""`
 `collector.config.nodeName` | Node name of this instance. If empty, will default to .Release.Name-collector | `""`
+`collector.pvc.enabled` | Create PVC for collector | `true`
+`collector.pvc.storageClassName` | storageClassName of collector PVC | `null`
+`collector.pvc.volumeName` | volumeName of collector PVC | `""`
 `collector.extraVolumes` | Extra volumes | `[]`
 `collector.extraVolumeMounts` | Extra volume mounts | `[]`
 `collector.initContainers` | Init containers | `[]`

@@ -55,6 +55,10 @@ spec:
             - name: entrypoint
               mountPath: /root/entrypoint.sh
               subPath: entrypoint.sh
+            {{ if .Values.collector.pvc.enabled -}}
+            - name: data
+              mountPath: /opt/data
+            {{- end }}
             {{- if .Values.collector.extraVolumeMounts -}}
             {{ toYaml .Values.collector.extraVolumeMounts | nindent 12 }}
             {{- end }}
@@ -63,6 +67,11 @@ spec:
           configMap:
             name: {{ include "aparavi.collector.fullname" . }}
             defaultMode: 0100
+        {{ if .Values.collector.pvc.enabled -}}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ include "aparavi.collector.fullname" . -}}-data
+        {{- end }}
         {{- if .Values.collector.extraVolumes -}}
         {{ toYaml .Values.collector.extraVolumes | nindent 8 }}
         {{- end }}

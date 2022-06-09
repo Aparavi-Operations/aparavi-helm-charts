@@ -88,6 +88,10 @@ collector:
     aggregatorHost: ""  # HOSTNAME:PORT
     # If left empty, will default to .Release.Name-collector
     nodeName: ""
+  pvc:
+    enabled: true
+    storageClassName:
+    volumeName: ""
   extraVolumes:
     []
     # - name: extras
