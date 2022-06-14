@@ -1,0 +1,21 @@
+{{- if .Values.appagent.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "aparavi.appagent.fullname" . }}
+  labels:
+    {{- include "aparavi.appagent.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.appagent.service.type }}
+  ports:
+    - port: {{ .Values.appagent.service.netPort }}
+      targetPort: net
+      protocol: TCP
+      name: net
+    - port: {{ .Values.appagent.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "aparavi.appagent.selectorLabels" . | nindent 4 }}
+{{- end }}

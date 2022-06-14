@@ -38,16 +38,39 @@ Parameter | Description | Default
 `serviceAccount.annotations` | Annotations to add to the service account | `{}`
 `serviceAccount.name` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`
 
+### Appagent parameters
+
+Parameter | Description | Default
+-|-|-
+`appagent.enabled` | Enable appagent | `true`
+`appagent.config.platform.host` | Aparavi Platform host in `"HOSTNAME:PORT"` format | `""`
+`appagent.config.platform.nodeId` | Aparavi Platform nodeId to bind to | `""`
+`appagent.config.nodeName` | Node name of this instance. If empty, will default to `{{ .Release.Name }}-appagent` | `""`
+`appagent.config.mysql.username` | MySQL username | `"root"`
+`appagent.config.mysql.password` | MySQL password | `"aparavi"`
+`appagent.extraVolumes` | Extra volumes | `[]`
+`appagent.extraVolumeMounts` | Extra volume mounts | `[]`
+`appagent.initContainers` | Init containers | `[]`
+`appagent.service.type` | Type of the Service | `"CluserIP"`
+`appagent.service.netPort` | `"net"` port | `9745`
+`appagent.service.httpPort` | `"http"` port | `9752`
+`appagent.podAnnotations` | Deployment pod annotations | `{}`
+`appagent.podSecurityContext` | Deployment pod `securityContext` | `{}`
+`appagent.securityContext` | `aparavi` container `securityContext` | `{}`
+`appagent.resources` | Pod resource requests and limits | `{}`
+`appagent.nodeSelector` | Node labels for pod assignment | `{}`
+`appagent.tolerations` | List of Node taints to tolerate | `[]`
+
 ### Aggregator parameters
 
 Parameter | Description | Default
 -|-|-
-`aggregator.enabled` | Enable aggregator | `true`
-`aggregator.config.platform.host` | External Aparavi Platform host in `"HOSTNAME:PORT"` format | `""`
-`aggregator.config.platform.nodeId` | External Aparavi Platform nodeId to bind to | `""`
-`aggregator.config.nodeName` | Node name of this instance. If empty, will default to .Release.Name-aggregator | `""`
-`aggregator.config.mysql.username` | MySQL username | `"aggregator"`
-`aggregator.config.mysql.password` | MySQL password | `"aggregator"`
+`aggregator.enabled` | Enable aggregator | `false`
+`aggregator.config.platform.host` | Aparavi Platform host in `"HOSTNAME:PORT"` format | `""`
+`aggregator.config.platform.nodeId` | Aparavi Platform nodeId to bind to | `""`
+`aggregator.config.nodeName` | Node name of this instance. If empty, will default to `{{ .Release.Name }}-aggregator` | `""`
+`aggregator.config.mysql.username` | MySQL username | `"root"`
+`aggregator.config.mysql.password` | MySQL password | `"aparavi"`
 `aggregator.extraVolumes` | Extra volumes | `[]`
 `aggregator.extraVolumeMounts` | Extra volume mounts | `[]`
 `aggregator.initContainers` | Init containers | `[]`
@@ -66,9 +89,9 @@ Parameter | Description | Default
 
 Parameter | Description | Default
 -|-|-
-`collector.enabled` | Enable aggregator | `true`
+`collector.enabled` | Enable aggregator | `false`
 `collector.config.aggregatorHost` | External Aparavi Aggregator host in `"HOSTNAME:PORT"` format | `""`
-`collector.config.nodeName` | Node name of this instance. If empty, will default to .Release.Name-collector | `""`
+`collector.config.nodeName` | Node name of this instance. If empty, will default to `{{ .Release.Name }}-collector` | `""`
 `collector.extraVolumes` | Extra volumes | `[]`
 `collector.extraVolumeMounts` | Extra volume mounts | `[]`
 `collector.initContainers` | Init containers | `[]`
@@ -90,10 +113,10 @@ Parameter | Description | Default
 -|-|-
 `mysql.enabled` | Deploy a MySQL server to satisfy applications's database requirements | `true`
 `mysql.architecture` | MySQL architecture. Allowed values are `standalone` and `replication` | `"standalone"`
+`mysql.auth.rootPassword` | Password for the root user. | `aparavi`
 `mysql.auth.database` | Name for a custom database to create | `""`
-`mysql.initdbScripts` | Dictionary of initdb scripts | <pre>initdb.sql: \|<br>&emsp; create user 'aggregator'@'%' identified by 'aggregator';<br>&emsp; grant all privileges on *.* to 'aggregator'@'%';</pre>
 `mysql.primary.service.port` | MySQL Primary service port | `3306`
-`externalMysql.hostname` | External MySQL server hostname | `"redis-master"`
+`externalMysql.hostname` | External MySQL server hostname | `"mysql"`
 `externalMysql.port` | External MySQL server port | `3306`
 
 See https://artifacthub.io/packages/helm/bitnami/mysql/8.9.2 for further configuration of the in-chart MySQL and for how to obtain the MySQL root password.

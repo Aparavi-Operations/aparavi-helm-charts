@@ -15,7 +15,7 @@ serviceAccount:
   name: ""
 
 aggregator:
-  enabled: true
+  enabled: false
   config:
     platform:
       host: ""  # HOSTNAME:PORT
@@ -23,8 +23,8 @@ aggregator:
     # If left empty, will default to .Release.Name-aggregator
     nodeName: ""
     mysql:
-      username: aggregator
-      password: aggregator
+      username: root
+      password: aparavi
   extraVolumes:
     []
     # - name: extras
@@ -83,7 +83,7 @@ aggregator:
     []
 
 collector:
-  enabled: true
+  enabled: false
   config:
     aggregatorHost: ""  # HOSTNAME:PORT
     # If left empty, will default to .Release.Name-collector
@@ -145,15 +145,68 @@ collector:
   tolerations:
     []
 
+appagent:
+  enabled: true
+  config:
+    platform:
+      host: ""  # HOSTNAME:PORT
+      nodeId: ""
+    # If left empty, will default to .Release.Name-aggregator
+    nodeName: ""
+    mysql:
+      username: root
+      password: aparavi
+  extraVolumes:
+    []
+    # - name: extras
+    #   emptyDir: {}
+  extraVolumeMounts:
+    []
+    # - name: extras
+    #   mountPath: /usr/share/extras
+    #   readOnly: true
+  initContainers:
+    []
+    # - name: do-something
+    #   image: busybox
+    #   command: ['do', 'something']
+  service:
+    type: ClusterIP
+    netPort: 9745
+    httpPort: 9752
+  podAnnotations:
+    {}
+  podSecurityContext:
+    {}
+    # fsGroup: 2000
+  securityContext:
+    {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  resources:
+    {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector:
+    {}
+  affinity: {}
+  tolerations:
+    []
+
 mysql:
   enabled: true
   architecture: standalone
   auth:
+    rootPassword: aparavi
     database: ""
-  initdbScripts:
-    initdb.sql: |
-      create user 'aggregator'@'%' identified by 'aggregator';
-      grant all privileges on *.* to 'aggregator'@'%';
   primary:
     service:
       port: 3306

@@ -1,0 +1,87 @@
+{{- if .Values.appagent.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aparavi.appagent.fullname" . }}
+  labels:
+    {{- include "aparavi.appagent.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "aparavi.appagent.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/appagent-configmap.yaml") . | sha256sum }}
+        {{- with .Values.appagent.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "aparavi.appagent.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aparavi.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.appagent.podSecurityContext | nindent 8 }}
+      {{- if .Values.appagent.initContainers }}
+      initContainers:
+      {{- toYaml .Values.appagent.initContainers | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: aparavi
+          securityContext:
+            {{- toYaml .Values.appagent.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "aparavi.appagent.fullname" . }}
+                  key: mysql-password
+          ports:
+            - name: net
+              containerPort: 9745
+              protocol: TCP
+            - name: http
+              containerPort: 9752
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: net
+          resources:
+            {{- toYaml .Values.appagent.resources | nindent 12 }}
+          volumeMounts:
+            - name: entrypoint
+              mountPath: /root/entrypoint.sh
+              subPath: entrypoint.sh
+            {{- if .Values.appagent.extraVolumeMounts -}}
+            {{ toYaml .Values.appagent.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: entrypoint
+          configMap:
+            name: {{ include "aparavi.appagent.fullname" . }}
+            defaultMode: 0100
+        {{- if .Values.appagent.extraVolumes -}}
+        {{ toYaml .Values.appagent.extraVolumes | nindent 8 }}
+        {{- end }}
+      {{- with .Values.appagent.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.appagent.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.appagent.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

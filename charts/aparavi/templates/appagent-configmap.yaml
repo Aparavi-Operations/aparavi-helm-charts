@@ -1,0 +1,36 @@
+{{- if .Values.appagent.enabled }}
+{{- $default := printf "%s-appagent" .Release.Name -}}
+{{- $nodeName := default $default .Values.appagent.config.nodeName -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aparavi.appagent.fullname" . }}
+  labels:
+    {{- include "aparavi.appagent.labels" . | nindent 4 }}
+data:
+  entrypoint.sh: |
+    #!/bin/bash
+
+    tar -xf "${ARTIFACT}"
+    rm "${ARTIFACT}"
+    NODE_UUID=$(uuidgen --sha1 --namespace @x500 --name {{ quote $nodeName }})
+    NODE_UUID=${NODE_UUID:0:8}-apag-${NODE_UUID:14}
+    ./node \
+      app/webserver.js \
+      --moduleType=appagt \
+      --debug=INIT,WRKN,WKMN,WORK,NODC,NODS,TASK,DATB \
+      --logcon \
+      --enableMetrics=true \
+      --enableErrorStacks \
+      --config.node.nodeId=${NODE_UUID} \
+      --config.node.hostId=$(uuidgen -s -n @x500 -N {{ printf "%s-host" $nodeName | quote }}) \
+      --config.node.nodeName={{ quote $nodeName }} \
+      --config.node.bindTo={{ quote .Values.appagent.config.platform.host }} \
+      --config.node.parentObjectId={{ quote .Values.appagent.config.platform.nodeId }} \
+      --config.database.dialect=mysql \
+      --config.database.host={{ include "mysql.hostname" . }} \
+      --config.database.port={{ include "mysql.port" . }} \
+      --config.database.user={{ .Values.appagent.config.mysql.username }} \
+      --config.database.password="${MYSQL_PASSWORD}" \
+      --no-config.enableHttps
+{{- end }}

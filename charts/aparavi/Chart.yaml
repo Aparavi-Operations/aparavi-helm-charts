@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: "2.0.3-6437"
+appVersion: "2.1.0-6513"
 dependencies:
   - name: mysql
     condition: mysql.enabled
@@ -8,4 +8,4 @@ dependencies:
 description: Aparavi Helm chart for Kubernetes
 name: aparavi
 type: application
-version: 0.15.0
+version: 0.16.0
