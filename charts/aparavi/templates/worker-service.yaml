@@ -1,0 +1,17 @@
+{{- if .Values.worker.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "aparavi.worker.fullname" . }}
+  labels:
+    {{- include "aparavi.worker.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.worker.service.type }}
+  ports:
+    - port: {{ .Values.worker.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "aparavi.worker.selectorLabels" . | nindent 4 }}
+{{- end }}

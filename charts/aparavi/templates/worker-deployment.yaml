@@ -1,0 +1,78 @@
+{{- if .Values.worker.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "aparavi.worker.fullname" . }}
+  labels:
+    {{- include "aparavi.worker.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.worker.config.replicas }}
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "aparavi.worker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/worker-configmap.yaml") . | sha256sum }}
+        {{- with .Values.worker.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "aparavi.worker.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aparavi.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.worker.podSecurityContext | nindent 8 }}
+      {{- if .Values.worker.initContainers }}
+      initContainers:
+      {{- toYaml .Values.worker.initContainers | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: aparavi
+          securityContext:
+            {{- toYaml .Values.worker.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 9852
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: http
+          resources:
+            {{- toYaml .Values.worker.resources | nindent 12 }}
+          volumeMounts:
+            - name: entrypoint
+              mountPath: /root/entrypoint.sh
+              subPath: entrypoint.sh
+            {{- if .Values.worker.extraVolumeMounts -}}
+            {{ toYaml .Values.worker.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: entrypoint
+          configMap:
+            name: {{ include "aparavi.worker.fullname" . }}
+            defaultMode: 0100
+        {{- if .Values.worker.extraVolumes -}}
+        {{ toYaml .Values.worker.extraVolumes | nindent 8 }}
+        {{- end }}
+      {{- with .Values.worker.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.worker.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

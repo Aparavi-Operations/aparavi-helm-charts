@@ -1,0 +1,21 @@
+{{- if .Values.worker.enabled }}
+{{- $default := printf "%s-worker" .Release.Name -}}
+{{- $nodeName := default $default .Values.worker.config.nodeName -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aparavi.worker.fullname" . }}
+  labels:
+    {{- include "aparavi.worker.labels" . | nindent 4 }}
+data:
+  entrypoint.sh: |
+    #!/bin/bash
+
+    tar -xf "${ARTIFACT}"
+    rm "${ARTIFACT}"
+    ./node \
+      app/webserver.js \
+      --moduleType=worker \
+      --workerType=static \
+      --worker={{ quote .Values.worker.config.appagentHost }}
+{{- end }}
