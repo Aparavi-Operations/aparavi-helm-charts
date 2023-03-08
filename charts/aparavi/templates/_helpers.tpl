@@ -35,6 +35,9 @@ If release name contains chart name it will be used as a full name.
 {{- include "aparavi.fullname" . -}}-appagent
 {{- end }}
 
+{{- define "aparavi.worker.fullname" -}}
+{{- include "aparavi.fullname" . -}}-worker
+{{- end }}
 
 {{/*
 Create chart name and version as used by the chart label.
@@ -53,6 +56,10 @@ app.kubernetes.io/component: collector
 
 {{- define "aparavi.appagent.uniqueLabels" -}}
 app.kubernetes.io/component: appagent
+{{- end }}
+
+{{- define "aparavi.worker.uniqueLabels" -}}
+app.kubernetes.io/component: worker
 {{- end }}
 
 {{/*
@@ -76,6 +83,11 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "aparavi.appagent.selectorLabels" -}}
 {{ include "aparavi.selectorLabels" . }}
 {{ include "aparavi.appagent.uniqueLabels" . }}
+{{- end }}
+
+{{- define "aparavi.worker.selectorLabels" -}}
+{{ include "aparavi.selectorLabels" . }}
+{{ include "aparavi.worker.uniqueLabels" . }}
 {{- end }}
 
 {{/*
@@ -107,6 +119,13 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "aparavi.appagent.labels" -}}
 {{- $aparaviLabels := fromYaml (include "aparavi.labels" .) -}}
 {{- $selectorLabels := fromYaml (include "aparavi.appagent.selectorLabels" .) -}}
+{{- $labels := merge $selectorLabels $aparaviLabels -}}
+{{ toYaml $labels }}
+{{- end -}}
+
+{{- define "aparavi.worker.labels" -}}
+{{- $aparaviLabels := fromYaml (include "aparavi.labels" .) -}}
+{{- $selectorLabels := fromYaml (include "aparavi.worker.selectorLabels" .) -}}
 {{- $labels := merge $selectorLabels $aparaviLabels -}}
 {{ toYaml $labels }}
 {{- end -}}

@@ -201,12 +201,64 @@ appagent:
   tolerations:
     []
 
+worker:
+  enabled: false
+  config:
+    appagentHost: "" # HOSTNAME:PORT (example: "aparavi-appagent:9745" or "aparavi-appagent.default.svc.cluster.local:9745")
+    # If left empty, will default to .Release.Name-worker
+    nodeName: ""
+    # Number of concurrently running workers
+    replicas: 1
+  extraVolumes:
+    []
+    # - name: extras
+    #   emptyDir: {}
+  extraVolumeMounts:
+    []
+    # - name: extras
+    #   mountPath: /usr/share/extras
+    #   readOnly: true
+  initContainers:
+    []
+    # - name: do-something
+    #   image: busybox
+    #   command: ['do', 'something']
+  service:
+    type: ClusterIP
+    httpPort: 9852
+  podAnnotations:
+    {}
+  podSecurityContext:
+    {}
+    # fsGroup: 2000
+  securityContext:
+    {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+  resources:
+    {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+  nodeSelector:
+    {}
+  # affinity: {}
+  affinity: {}
+  tolerations:
+    []
+
 mysql:
-  enabled: true
+  enabled: true # For worker false
   architecture: standalone
   auth:
     rootPassword: aparavi
-    database: ""
   primary:
     service:
       port: 3306
